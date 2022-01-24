@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Input from "./components/Input";
 import Label from "./components/Label";
+import resetPasswordApi from "../apiClient/resetPasswordApi";
 
 function ResetPassword() {
   const [input, setInput] = useState({
@@ -11,9 +12,16 @@ function ResetPassword() {
 
   const { resettoken } = useParams();
 
-  useEffect(() => {
-    console.log(resettoken);
-  }, [resettoken]);
+  const handleChang = async () => {
+    try {
+      const res = await resetPasswordApi.post(resettoken, {
+        newPassword: input.newPassword,
+      });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const inputStyle =
     "peer w-9/10 flex-shirnk-0 flex-grow mb-4 py-2 pr-2 outline-none border-b-2 border-b-[#47392b] placeholder:text-[#47392b] bg-transparent placeholder:text-[#51050F] placeholder:text-[1rem] placeholder:font-robotoS focus:placeholder:text-transparent placeholder:transition-colors placeholder:ease-out";

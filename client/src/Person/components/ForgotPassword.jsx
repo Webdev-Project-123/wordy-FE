@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Input from "./Input";
 import Label from "./Label";
+import forgotPasswordApi from "../../apiClient/forgotPasswordApi";
+
 function ForgotPassword({ handlePopForgotPass }) {
   const [email, setEmail] = useState({ email: "" });
 
@@ -8,6 +10,15 @@ function ForgotPassword({ handlePopForgotPass }) {
     "block lg:w-2/5 md:w-3/5 w-4/5 mb-4 py-2 pr-2 outline-none border-b-2 border-b-[#47392b] placeholder:text-[#47392b] bg-transparent placeholder:text-[#51050F] placeholder:text-[1rem] placeholder:font-robotoS focus:placeholder:text-transparent placeholder:transition-colors placeholder:ease-out";
   const labelStyle =
     "w-full flex justify-center items-center flex-wrap gap-3 text-[#47392b]";
+
+  const handleSubmit = async () => {
+    try {
+      const res = await forgotPasswordApi.post({ email: email });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     window.onclick = () => {
@@ -62,7 +73,10 @@ function ForgotPassword({ handlePopForgotPass }) {
             Invalid Email*
           </p>
         </Label>
-        <button className="bg-[#fcd07e] lg:w-[15%] md:w-[20%] w-[30%] h-[8%] rounded-md shadow-phuongProfile active:shadow-none active:translate-y-1">
+        <button
+          onClick={handleSubmit}
+          className="bg-[#fcd07e] lg:w-[15%] md:w-[20%] w-[30%] h-[8%] rounded-md shadow-phuongProfile active:shadow-none active:translate-y-1"
+        >
           Next
         </button>
       </div>

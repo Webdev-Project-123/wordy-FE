@@ -92,7 +92,7 @@ const ProductThumb = ({ productData }) => {
 
             {/* Info */}
             <div className="flex items-center text-red-600 text-xs sm:text-base font-semibold">
-              {Math.round(productData.productPrice)} $
+              {Math.round(productData.productPrice)}$
               <p className="ml-2 px-1 py-0 sm:px-2 sm:py-1 bg-red-600 rounded-md text-white text-xs">
                 -
                 {Math.round(
@@ -105,7 +105,7 @@ const ProductThumb = ({ productData }) => {
               </p>
             </div>
             <p className="line-through text-xs sm:text-base text-gray-500 -top-2">
-              {productData.productSalePrice + 10} $
+              {productData.productSalePrice}$
             </p>
           </div>
 

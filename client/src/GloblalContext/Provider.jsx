@@ -33,7 +33,6 @@ function LoginProvider({ children }) {
       };
 
       timerID = setInterval(() => {
-        localStorage.removeItem("accessToken");
         hadleResetToken();
       }, (9 * 60 + 30) * 1000);
     }

@@ -12,6 +12,7 @@ import addUserCartApi from "../apiClient/addUserCartApi";
 
 export const CartItem = ({
   product,
+  select,
   changeItemCount,
   handleDeleteItem,
   handleSelect,
@@ -30,7 +31,7 @@ export const CartItem = ({
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className={`h-6 w-6 rounded-full ${
-              product?.select ? "bg-[#5db324]" : "bg-none"
+              select === true ? "bg-[#5db324]" : "bg-none"
             }`}
             fill="none"
             viewBox="0 0 24 24"
@@ -163,15 +164,24 @@ function YourCart() {
       currCart = JSON.parse(localStorage.getItem("cart")) || [];
     }
     const totalQuantity = currCart.reduce((sum, el) => {
-      if (el?.select) return sum + el.productQuantity;
+      if (el?.select) {
+        if (el.productQuantity) return sum + el.productQuantity;
+        else return sum + el.quantity;
+      }
       return sum + 0;
     }, 0);
     const totalMoney = currCart
       .reduce((sum, el) => {
-        if (el?.select) return sum + el.productPrice * el.productQuantity;
+        if (el?.select) {
+          if (el.productPrice && el.productQuantity) {
+            return sum + el.productPrice * el.productQuantity;
+          } else {
+            return sum + el.discount * el.quantity;
+          }
+        }
         return sum + 0;
       }, 0)
-      ?.toFixed(3);
+      ?.toFixed(2);
 
     setTotalMoney(totalMoney);
     setTotalQuantity(totalQuantity);
@@ -236,7 +246,6 @@ function YourCart() {
           title: element.productName,
           discount: +element.productPrice,
           quantity: +element.productQuantity,
-          // date: `${date}-${month}-${year}`,
         });
       } else {
         newCart.push(element);
@@ -251,7 +260,7 @@ function YourCart() {
   };
 
   const handleSelect = (product) => {
-    let currCart = cart;
+    let currCart = [...cart];
     if (!userID) {
       currCart = JSON.parse(localStorage.getItem("cart")) || [];
     }
@@ -264,7 +273,6 @@ function YourCart() {
         else element.select = false;
       }
     });
-
     localStorage.setItem("cart", JSON.stringify(currCart));
     setCart(currCart);
   };
@@ -307,6 +315,7 @@ function YourCart() {
               return (
                 <CartItem
                   product={item}
+                  select={item.select}
                   changeItemCount={changeItemCount}
                   handleDeleteItem={handleDeleteItem}
                   handleSelect={handleSelect}

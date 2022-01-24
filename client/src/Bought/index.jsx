@@ -18,7 +18,7 @@ export default function Bought() {
 
   const getBouthApi = async () => {
     try {
-      const res = await getBoughtLishApi(userID);
+      const res = await getBoughtLishApi.get(userID);
       console.log(res);
       setState(res.data);
     } catch (error) {

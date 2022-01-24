@@ -101,12 +101,12 @@ function Information(props) {
           </div>
           {/* content1 */}
           <div className=" flex flex-col items-center ml-[10px] ">
-            <p className="">{props.information["productID"]}</p>
+            <p className="">{props.information["productID"] || "#"}</p>
             <p className="mt-[15px]">
-              {props.information["productPublishCompany"]}
+              {props.information["productPublishComp"]}
             </p>
             <p className="mt-[15px]">
-              {props.information["productPublishCompany"]}
+              {props.information["productPublishComp"]}
             </p>
             <p className="mt-[15px]">
               {props.information["productAuthors"]?.[0]}

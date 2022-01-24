@@ -255,11 +255,11 @@ function Profile() {
                 </div>
                 <img
                   src={avatarProfile?.preview || info.avatar}
-                  className="w-full h-full rounded-full object-contain"
+                  className="w-full h-full rounded-full object-full"
                 />
               </div>
               <p className="text-[#fffaee] font-robotoS text-xl first hidden md:block">
-                Welcome! Nguyen Duc Phuong
+                Welcome! {info.name}
               </p>
             </div>
             <Link to={`/bought/${userID}`}>
@@ -412,11 +412,11 @@ function Profile() {
                 {showPassword ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 cursor-pointer enalble"
+                    className="h-6 w-6 cursor-pointer enalble invisible"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    onClick={handleShowPassword}
+                    // onClick={handleShowPassword}
                   >
                     <path
                       strokeLinecap="round"
@@ -428,11 +428,11 @@ function Profile() {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 cursor-pointer"
+                    className="h-6 w-6 cursor-pointer invisible"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    onClick={handleShowPassword}
+                    // onClick={handleShowPassword}
                   >
                     <path
                       strokeLinecap="round"
