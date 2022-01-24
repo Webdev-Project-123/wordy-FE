@@ -1,5 +1,11 @@
-import { useEffect, useRef, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+  useLayoutEffect,
+} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import avatar from "./Image/avatar.jpg";
 import Input from "./components/Input";
 import Label from "./components/Label";
@@ -11,6 +17,8 @@ import updateProfileApi from "../apiClient/updateProfileApi";
 
 import Header from "../Home/Header";
 import Footer from "../Home/Footer";
+
+import getUserProfileApi from "../apiClient/getUserProfileApi";
 
 function Profile() {
   const [isLogin, setIsLogin] = useContext(isLoginContext);
@@ -42,7 +50,24 @@ function Profile() {
   const labelStyle =
     "label w-full flex justify-center items-center md:flex-wrap gap-3 text-[#47392b] rounded-md";
 
+  let userID;
+
+  useLayoutEffect(() => {
+    userID = localStorage?.getItem("userID") || "local";
+  });
   const uploadFileRef = useRef();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getUserProfileApi.get();
+        console.log(res);
+        setInfo(res.profile);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (!isLogin) navigate("/login");
@@ -79,11 +104,12 @@ function Profile() {
     });
   }, []);
 
-  useEffect(() => {
-    window.onmousemove = () => {
-      document.getElementById("bg").click();
-    };
-  });
+  // useEffect(() => {
+  //   window.onclick = () => {
+  //     document.getElementById("bg").click();
+  //   };
+  //   return w;
+  // });
 
   const handleShowPassword = () => {
     setShowPassword((prev) => {
@@ -152,7 +178,7 @@ function Profile() {
       <Header />
       <div
         id="bg"
-        className="flex w-screen h-screen overflow-x-hidden justify-center items-center lg:py-[3rem] md:py-[7rem] font-robotoS"
+        className="flex w-screen h-screen overflow-x-hidden justify-center bg-[#fff0cf] items-center lg:py-[3rem] md:py-[7rem] font-robotoS"
       >
         {popUp && (
           <Upload
@@ -178,26 +204,28 @@ function Profile() {
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            <button className="group hidden relative lg:w-[200px] w-[170px] h-[50px] bg-[#FAC082] before:absolute before:left-0 before:top-0 before:bg-[#f09f49] before:h-full before:w-full hover:before:w-0 before:rounded-md before:transition-all before:ease-in-out md:flex justify-center items-center gap-2 rounded-md shadow-phuongProfileBtn">
-              <span className="absolute text-[#F4DFBA] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:opacity-0 transition-all ease-out">
-                Hover me!
-              </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              Your cart
-            </button>
+            <Link to={`/cart/${userID}`}>
+              <button className="group hidden relative lg:w-[200px] w-[170px] h-[50px] bg-[#FAC082] before:absolute before:left-0 before:top-0 before:bg-[#f09f49] before:h-full before:w-full hover:before:w-0 before:rounded-md before:transition-all before:ease-in-out md:flex justify-center items-center gap-2 rounded-md shadow-phuongProfileBtn">
+                <span className="absolute text-[#F4DFBA] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:opacity-0 transition-all ease-out">
+                  Hover me!
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+                Your cart
+              </button>
+            </Link>
             <div className="flex justify-center items-center flex-col gap-3">
               <div className=" group relative rounded-full w-[70px] h-[70px]">
                 <div
@@ -226,7 +254,7 @@ function Profile() {
                   </svg>
                 </div>
                 <img
-                  src={avatarProfile?.preview || avatar}
+                  src={avatarProfile?.preview || info.avatar}
                   className="w-full h-full rounded-full object-contain"
                 />
               </div>
@@ -234,26 +262,28 @@ function Profile() {
                 Welcome! Nguyen Duc Phuong
               </p>
             </div>
-            <button className="hidden group relative lg:w-[200px] w-[170px] h-[50px] bg-[#FAC082] before:absolute before:right-0 before:top-0 before:bg-[#f09f49] before:h-full before:w-full hover:before:w-0 before:rounded-md before:transition-all before:ease-in-out md:flex justify-center items-center gap-2 rounded-md shadow-phuongProfileBtn">
-              <span className="absolute text-[#F4DFBA] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:opacity-0 transition-all ease-out">
-                Hover me!
-              </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              Bought list
-            </button>
+            <Link to={`/bought/${userID}`}>
+              <button className="hidden group relative lg:w-[200px] w-[170px] h-[50px] bg-[#FAC082] before:absolute before:right-0 before:top-0 before:bg-[#f09f49] before:h-full before:w-full hover:before:w-0 before:rounded-md before:transition-all before:ease-in-out md:flex justify-center items-center gap-2 rounded-md shadow-phuongProfileBtn">
+                <span className="absolute text-[#F4DFBA] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:opacity-0 transition-all ease-out">
+                  Hover me!
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                Bought list
+              </button>
+            </Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-9 w-9 text-[#DFD3C3] md:hidden"
@@ -292,7 +322,7 @@ function Profile() {
                     onChange={handleChangeInfor}
                     type={"text"}
                     name={"name"}
-                    value={info.name}
+                    value={info?.name}
                     className={inputStyle}
                     disabled={disabled[0]}
                   />
@@ -333,7 +363,7 @@ function Profile() {
                     onChange={handleChangeInfor}
                     type={"email"}
                     name={"email"}
-                    value={info.email}
+                    value={info?.email}
                     className={inputStyle}
                     disabled={disabled[1]}
                   />
@@ -374,7 +404,7 @@ function Profile() {
                     ref={inputRef}
                     type={"password"}
                     name={"password"}
-                    value={info.password}
+                    value={info?.password}
                     className={inputStyle}
                     disabled={disabled[2]}
                   />
@@ -448,7 +478,7 @@ function Profile() {
                     onChange={handleChangeInfor}
                     type={"tel"}
                     name={"phone"}
-                    value={info.phone}
+                    value={info?.phone}
                     className={inputStyle}
                     disabled={disabled[3]}
                   />
@@ -489,7 +519,7 @@ function Profile() {
                     onChange={handleChangeInfor}
                     type={"text"}
                     name={"address"}
-                    value={info.address}
+                    value={info?.address}
                     className={inputStyle}
                     disabled={disabled[4]}
                   />

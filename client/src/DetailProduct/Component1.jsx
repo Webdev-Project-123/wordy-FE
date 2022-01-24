@@ -4,22 +4,23 @@ import Average from "./Average";
 import SumStar from "./SumStar";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../GloblalContext/CartContext";
+import addUserCartApi from "../apiClient/addUserCartApi";
 
 function Component1(props) {
   const [cart, setCart] = useContext(CartContext);
 
   const item = props.Component1;
   let cartPedingUpload = {
-    productID: item["id"],
-    productName: item["title"],
-    productPrice: item["discount"],
+    productID: item["productId"],
+    productName: item["productName"],
+    productPrice: item["productSalePrice"],
+    productImage: item["productImage"],
     productQuantity: 0,
   };
   useEffect(() => {
     cartPedingUpload.productQuantity = counts;
-    console.log(cartPedingUpload);
   });
-  const number = item["in-stock"];
+  const number = item["productInStock"];
   const [counts, setCounts] = useState(1);
   const handleClick = (number, value) => {
     if (value >= 1 && value <= number) {
@@ -27,11 +28,43 @@ function Component1(props) {
     }
   };
 
+  const userID = localStorage.getItem("userID");
+
+  const apiAdd = async (userID, payload) => {
+    try {
+      const res = await addUserCartApi.put(userID, payload);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleAddToCart = () => {
-    const cartLocal = JSON.parse(localStorage.getItem("cart")) || [];
-    cartLocal.splice(cartLocal.length, 0, cartPedingUpload);
-    localStorage.setItem("cart", JSON.stringify(cartLocal));
-    setCart(cartLocal);
+    let currCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    {
+      /* Add new item to cart */
+    }
+    if (!currCart.some((e) => e.productName === cartPedingUpload.productName)) {
+      currCart.push({
+        productID: cartPedingUpload.productID,
+        productImage: cartPedingUpload.productImage,
+        productPrice: cartPedingUpload.productPrice,
+        productName: cartPedingUpload.productName,
+        productQuantity: cartPedingUpload.productQuantity,
+      });
+    } // Add exist item
+    else {
+      currCart.forEach((element) => {
+        if (element.productName === cartPedingUpload.productName)
+          element.productQuantity += cartPedingUpload.productQuantity;
+      });
+    }
+
+    {
+      /* Set cart */
+    }
+    localStorage.setItem("cart", JSON.stringify(currCart));
+    setCart(currCart);
   };
 
   return (
@@ -46,7 +79,7 @@ function Component1(props) {
             className="rounded-2xl m-1[0px] lg:h-[400px] lg:w-[450px] h-[340px] w-[340px] shadow-phuongCustomActive shadow-black
                                         lg:hover:h-[450px] lg:hover:w-[500px] lg:hover:rounded-3xl lg:duration-1000
                         "
-            src={`${item["image"]}`}
+            src={`${item["productImage"]}`}
             alt=""
             srcset=""
           />
@@ -60,12 +93,14 @@ function Component1(props) {
           <div className="px-[10px]">
             {/* Title */}
             <h1 className="font-bold text-2xl mt-[20px] font-robotoS">
-              {item["title"]}
+              {item["productName"]}
             </h1>
             {/* Star */}
             <div className="flex mt-2 opacity-50 items-center">
-              <Rating avg={Average(item["rating"])} />
-              <p className="ml-[10px]">Have {SumStar(item["rating"])} rating</p>
+              <Rating avg={Average(item["productRate"])} />
+              <p className="ml-[10px]">
+                Have {SumStar(item["productRate"])} rating
+              </p>
             </div>
             {/* ShortInformation */}
             <div className="flex flex-wrap mt-[5px]">
@@ -74,13 +109,13 @@ function Component1(props) {
                 <div className="flex">
                   <p className="text-sm mt-[2px]">Supplier:</p>
                   <p className="text-base ml-[8px] font-semibold">
-                    {item["publishing-company"]}
+                    {item["productPublishComp"]}
                   </p>
                 </div>
                 <div className="flex">
                   <p className="text-sm mt-[2px]">Company:</p>
                   <p className="text-base ml-[8px] font-semibold">
-                    {item["publishing-company"]}
+                    {item["productPublishComp"]}
                   </p>
                 </div>
               </div>
@@ -89,7 +124,7 @@ function Component1(props) {
                 <div className="flex">
                   <p className="text-sm mt-[2px]">Author:</p>
                   <p className="text-base ml-[8px] font-semibold">
-                    {item["authors"]}
+                    {item["productAuthors"]}
                   </p>
                 </div>
                 <div className="flex">
@@ -121,10 +156,10 @@ function Component1(props) {
                 className="mt-[9px] ml-[10px] opacity-50 line-through
                            "
               >
-                {item["price"]}$
+                {item["productPrice"]}$
               </p>
               <p className="text-2xl  text-red-500 font-bold ml-[10px]">
-                {item["discount"]}$
+                {item["productSalePrice"]}$
               </p>
               <div className="flex items-center lg:ml-[20px] ml-[10px] bg-red-600 text-white px-[8px] py-[15px] rounded-3xl h-[20px] animate-bounce shadow-phuongCustom shadow-slate-500 ">
                 <p>Super sale</p>
@@ -260,13 +295,23 @@ function Component1(props) {
               </div>
               <p className="text-sm lg:mt-0 mt-[10px] ml-[20px] text-slate-800 font-bold">
                 {" "}
-                Only have {item["in-stock"]} products
+                Only have {item["productInStock"]} products
               </p>
             </div>
             {/* Add to the cart */}
             <div className="mt-[20px] justify-center flex text-white h-[50px]">
               <button
-                onClick={handleAddToCart}
+                onClick={() => {
+                  apiAdd(userID, {
+                    product: {
+                      id: item["productId"],
+                      title: item["productName"],
+                      discount: item["productSalePrice"],
+                      quantity: counts,
+                    },
+                  });
+                  handleAddToCart();
+                }}
                 className="border-solid border-2  bg-red-600 hover:bg-red-700 rounded-2xl w-[200px] h-[36px]"
               >
                 <div className="flex items-center  justify-center">

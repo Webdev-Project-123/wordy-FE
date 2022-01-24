@@ -101,16 +101,20 @@ function Information(props) {
           </div>
           {/* content1 */}
           <div className=" flex flex-col items-center ml-[10px] ">
-            <p className="">{props.information["id"]}</p>
+            <p className="">{props.information["productID"]}</p>
             <p className="mt-[15px]">
-              {props.information["publishing-company"]}
+              {props.information["productPublishCompany"]}
             </p>
             <p className="mt-[15px]">
-              {props.information["publishing-company"]}
+              {props.information["productPublishCompany"]}
             </p>
-            <p className="mt-[15px]">{props.information["authors"][0]}</p>
-            <p className="mt-[15px]">{props.information["categories"][0]}</p>
-            <p className="mt-[15px]">{props.information["language"]}</p>
+            <p className="mt-[15px]">
+              {props.information["productAuthors"]?.[0]}
+            </p>
+            <p className="mt-[15px]">
+              {props.information["productCategories"]?.[0]}
+            </p>
+            <p className="mt-[15px]">{props.information["productLanguage"]}</p>
           </div>
         </div>
         <div className=" flex lg:min-w-namCustome lg:mt-0 md:mt-0 mt-[-16px] bg-white min-w-[360px] p-[20px]  min-h-namCustome h-max rounded-r-xl">
@@ -194,11 +198,11 @@ function Information(props) {
             <p className="mt-[15px]">Pages:</p>
           </div>
           <div className=" flex flex-col items-center ml-[10px] ">
-            <p className="">{props.information["publication-date"]}</p>
+            <p className="">{props.information["productPublishDate"]}</p>
             <p className="flex mt-[15px]">400g</p>
             <p className="mt-[15px]">20x20cm</p>
             <p className="mt-[15px]">Paperback, Hardcover</p>
-            <p className="mt-[15px]">{props.information["pages"]}</p>
+            <p className="mt-[15px]">{props.information["productPages"]}</p>
           </div>
         </div>
       </div>

@@ -1,9 +1,26 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../GloblalContext/CartContext";
 import { isLoginContext } from "../GloblalContext/context";
 import SearchBar from "../SearchPage/SearchBar";
 import { SearchContext } from "../SearchPage/SearchContext";
+
+const boughtIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-7 w-7"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+);
 
 const addIcon = (
   <svg
@@ -76,7 +93,7 @@ const loginIcon = (
 const cartBadge = (cart) => {
   if (!cart) return;
 
-  let itemsAmount = cart.reduce((i1, i2) => i1 + i2.count, 0);
+  let itemsAmount = cart.reduce((i1, i2) => i1 + i2?.productQuantity, 0);
 
   if (!itemsAmount) return;
 
@@ -122,8 +139,8 @@ const Header = () => {
 
   let userID;
 
-  useEffect(() => {
-    userID = localStorage.getItem("userID");
+  useLayoutEffect(() => {
+    userID = localStorage?.getItem("userID") || "local";
   });
 
   return (
@@ -140,7 +157,7 @@ const Header = () => {
       <nav className="flex-1 md:block hidden">
         <div className="flex items-center justify-end gap-3 sm:gap-8">
           <button className="relative">
-            <Link to={"/cart"}>
+            <Link to={`/cart/${userID}`}>
               {cartBadge(cart)}
               <svg
                 className="w-7 h-7"
@@ -158,11 +175,12 @@ const Header = () => {
               </svg>
             </Link>
           </button>
+          <button>
+            <Link to={`/bought/${userID}`}>{boughtIcon}</Link>
+          </button>
           {/* ADD PRODUCT */}
           <button>
-            <Link to={isLogin ? `/account/${userID}` : "/login"}>
-              {addIcon}
-            </Link>
+            <Link to={isLogin ? `/upload/${userID}` : "/login"}>{addIcon}</Link>
           </button>
           {/* Login/Account */}
           <button>

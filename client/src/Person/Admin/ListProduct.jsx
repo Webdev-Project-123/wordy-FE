@@ -1,4 +1,6 @@
-import { useEffect } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
+
+import getProductAddListApi from "../../apiClient/getProductAddListApi";
 
 function ListProduct({ handleToggleList }) {
   useEffect(() => {
@@ -10,98 +12,25 @@ function ListProduct({ handleToggleList }) {
     };
   }, []);
 
-  const initialData = [
+  const [initialData, setInitialData] = useState([
     {
       id: 1,
       name: "name1",
       uploadDate: "1-1-1",
     },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-    {
-      id: 1,
-      name: "name1",
-      uploadDate: "1-1-1",
-    },
-  ];
+  ]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getProductAddListApi.get();
+        console.log(res);
+        setInitialData(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <div className="absolute overflow-x-hidden w-screen h-screen flex justify-center items-center z-50 bg-[rgba(0,0,0,0.6)] font-robotoS">
@@ -129,21 +58,23 @@ function ListProduct({ handleToggleList }) {
           </svg>
         </button>
         <div className="ld:w-4/5 md:w-[90%] w-full md:px-0 px-2 h-4/5 flex items-center flex-col overflow-y-scroll">
-          {initialData.map(({ id, name, uploadDate }, index) => {
-            return (
-              <div
-                className={`w-full h-auto py-4 flex ${
-                  index % 2 === 0 ? "bg-[#fff4e6]" : "bg-[#f5e9d8]"
-                }`}
-              >
-                <p className="w-[20%] text-center p-5">{id}</p>
-                <p className="w-[60%] text-left border-l border-r border-[#421f1f] p-5">
-                  {name}
-                </p>
-                <p className="w-[20%] text-center p-5">{uploadDate}</p>
-              </div>
-            );
-          })}
+          {initialData.map(
+            ({ productId, productName, productUploadDate }, index) => {
+              return (
+                <div
+                  className={`w-full h-auto py-4 flex ${
+                    index % 2 === 0 ? "bg-[#fff4e6]" : "bg-[#f5e9d8]"
+                  }`}
+                >
+                  <p className="w-[20%] text-center p-5">{productId}</p>
+                  <p className="w-[60%] text-left border-l border-r border-[#421f1f] p-5">
+                    {productName}
+                  </p>
+                  <p className="w-[20%] text-center p-5">{productUploadDate}</p>
+                </div>
+              );
+            }
+          )}
         </div>
       </div>
     </div>

@@ -25,7 +25,9 @@ function App() {
   const [searchValue, setSearchValue] = useState("");
   const [cart, setCart] = useState([]);
 
-  { /* Init cart */ }
+  {
+    /* Init cart */
+  }
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
@@ -47,7 +49,7 @@ function App() {
             <Route path="cart/:userID" element={<YourCart />} />
             <Route path="bought/:userID" element={<Bought />} />
             <Route path="upload/:userID" element={<AddProduct />} />
-            <Route path="search/products?name=" element={<AddProduct />} />
+            {/* <Route path="search/products?name=" element={<AddProduct />} /> */}
             <Route path="cart" element={<YourCart />} />
             <Route path="cart/:userID" element={<YourCart />} />
             <Route path="nomatch" element={<NoMatch />} />

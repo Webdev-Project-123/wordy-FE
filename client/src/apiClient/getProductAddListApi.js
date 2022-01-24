@@ -1,9 +1,9 @@
 import axiosClient from "./axiosClient";
 
 const getProductAddListApi = {
-  get(request) {
+  get() {
     const url = "/api/upload";
-    return axiosClient.get(request, {
+    return axiosClient.get(url, {
       headers: {
         "content-type": "application/json",
       },

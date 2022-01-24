@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useEffect } from "react/cjs/react.development";
 import Input from "../components/Input";
 import Label from "../components/Label";
+import deleteProductApi from "../../apiClient/deleteProductApi";
 
 function DeleteProduct({ handleToggleDeletePopup }) {
-  const [productID, setProductID] = useState();
+  const [productID, setProductID] = useState("");
 
   const inputStyle =
     "peer w-9/10 flex-shirnk-0 flex-grow mb-4 py-2 pr-2 outline-none border-b-2 border-b-[#47392b] placeholder:text-[#47392b] bg-transparent placeholder:text-[#51050F] placeholder:text-[1rem] placeholder:font-robotoS focus:placeholder:text-transparent placeholder:transition-colors placeholder:ease-out";
@@ -13,6 +14,17 @@ function DeleteProduct({ handleToggleDeletePopup }) {
 
   const handleChangeProductID = (e) => {
     setProductID(e.target.value);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const payload = productID.split(" ").map((el) => +el);
+      console.log(payload);
+      const res = await deleteProductApi.delete({ productIds: payload });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +63,7 @@ function DeleteProduct({ handleToggleDeletePopup }) {
         </button>
         <Label className={labelStyle}>
           <Input
-            type="number"
+            type="text"
             // name={productID}
             onChange={handleChangeProductID}
             value={productID}
@@ -59,7 +71,13 @@ function DeleteProduct({ handleToggleDeletePopup }) {
             className={inputStyle}
           />
         </Label>
-        <button className=" w-1/4 h-auto py-3 bg-[#f7af6c] shadow-phuongProfile active:translate-y-1 active:shadow-none rounded-md">
+        <button
+          onClick={() => {
+            handleDelete();
+            handleToggleDeletePopup();
+          }}
+          className=" w-1/4 h-auto py-3 bg-[#f7af6c] shadow-phuongProfile active:translate-y-1 active:shadow-none rounded-md"
+        >
           Delete
         </button>
       </div>

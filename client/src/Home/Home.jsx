@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Spinner from "../ProductPage/Spinner";
+import getHotProductsApi from "../apiClient/getHotProductsApi";
 
 const banners = [
   "https://gamepress.gg/arknights/sites/arknights/files/2021-07/EunectesBannerRerun_0.jpeg",
@@ -87,11 +88,12 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("https://fakestoreapi.com/products");
-        setHotDeal(res);
+        const res = await getHotProductsApi.get();
+        console.log(res.data);
+        setHotDeal(res.data);
         setLoading(false);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
 
@@ -134,7 +136,7 @@ const Home = () => {
         <div className={loading ? "flex mt-2 justify-center" : "hot-deal"}>
           {loading && <Spinner />}
           {hotDeal &&
-            hotDeal.data.map((data, index) => (
+            hotDeal.map((data, index) => (
               <ProductThumb key={index} productData={data} />
             ))}
         </div>
