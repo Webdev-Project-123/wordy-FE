@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import deleteProductApi from "../../apiClient/deleteProductApi";

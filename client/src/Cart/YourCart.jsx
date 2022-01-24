@@ -1,5 +1,4 @@
-import { useContext, useLayoutEffect, useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useContext, useLayoutEffect, useState, useEffect } from "react";
 import { CartContext } from "../GloblalContext/CartContext";
 import Footer from "../Home/Footer";
 import Header from "../Home/Header";

@@ -5,7 +5,7 @@ import SumStar from "./SumStar";
 import Header from "../Home/Header";
 import Footer from "../Home/Footer";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import getProductApi from "../apiClient/getProductApi";
 
 // const item = {

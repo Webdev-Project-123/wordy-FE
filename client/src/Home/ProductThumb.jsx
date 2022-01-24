@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Styles/customProductThumb.css";
 import Rating from "./Rating";
-import { useContext } from "react/cjs/react.development";
 import { CartContext } from "../GloblalContext/CartContext";
 import { Link, Navigate } from "react-router-dom";
 import addUserCartApi from "../apiClient/addUserCartApi";

@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useState } from "react/cjs/react.development";
 import Footer from "../Home/Footer";
 import Header from "../Home/Header";
 import ProductThumb from "../Home/ProductThumb";
