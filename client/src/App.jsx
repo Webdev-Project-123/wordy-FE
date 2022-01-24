@@ -19,6 +19,7 @@ import Bought from "./Bought";
 import { CartContext } from "./GloblalContext/CartContext";
 import { useEffect } from "react";
 import NoMatch from "./NoMatch";
+import YourCart from "./Cart/YourCart";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -45,6 +46,7 @@ function App() {
             <Route path="categories/:category/" element={<ProductPage />} />
             <Route path="search/:searchValue/" element={<SearchPage />} />
             <Route path="product/:productID" element={<Detail />} />
+            <Route path="cart/:userID" element={<YourCart />} />
             <Route path="bought/:userID" element={<Bought />} />
             <Route path="upload/:userID" element={<AddProduct />} />
             <Route path="search/products?name=" element={<AddProduct />} />

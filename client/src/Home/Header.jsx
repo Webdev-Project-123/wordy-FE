@@ -135,7 +135,7 @@ const Header = () => {
       <nav className="flex-1 md:block hidden">
         <div className="flex items-center justify-end gap-3 sm:gap-8">
           <button className="relative">
-            <Link to={isLogin ? `/cart` : "/login"}>
+            <Link to="/cart">
               {cartBadge(cart.length)}
               <svg
                 className="w-7 h-7"

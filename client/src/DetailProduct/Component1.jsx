@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Rating from "../Home/Rating";
 import Average from "./Average";
 import SumStar from "./SumStar";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../GloblalContext/CartContext";
 
 function Component1(props) {
+  const [cart, setCart] = useContext(CartContext);
+
   const item = props.Component1;
-  let cart = {
+  let cartPedingUpload = {
     productID: item["id"],
     productName: item["title"],
     productPrice: item["discount"],
     productQuantity: 0,
   };
   useEffect(() => {
-    cart.productQuantity = counts;
-    console.log(cart);
+    cartPedingUpload.productQuantity = counts;
+    console.log(cartPedingUpload);
   });
   const number = item["in-stock"];
   const [counts, setCounts] = useState(1);
@@ -23,6 +26,14 @@ function Component1(props) {
       setCounts(value);
     }
   };
+
+  const handleAddToCart = () => {
+    const cartLocal = JSON.parse(localStorage.getItem("cart")) || [];
+    cartLocal.splice(cartLocal.length, 0, cartPedingUpload);
+    localStorage.setItem("cart", JSON.stringify(cartLocal));
+    setCart(cartLocal);
+  };
+
   return (
     <div className="bg-[#FCECDD] lg:h-[500px] h-max lg:py-0 py-[20px] flex justify-center items-center lg:text-lg sm:text-sm">
       <div className="flex flex-wrap  justify-center  ">
@@ -254,7 +265,10 @@ function Component1(props) {
             </div>
             {/* Add to the cart */}
             <div className="mt-[20px] justify-center flex text-white h-[50px]">
-              <button className="border-solid border-2  bg-red-600 hover:bg-red-700 rounded-2xl w-[200px] h-[36px]">
+              <button
+                onClick={handleAddToCart}
+                className="border-solid border-2  bg-red-600 hover:bg-red-700 rounded-2xl w-[200px] h-[36px]"
+              >
                 <div className="flex items-center  justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

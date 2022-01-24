@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const axiosClient = axios.create({
-  // baseURL: "https://wordy-library.vercel.app/api/",
+  // baseURL: "https://wordy-library.herokuapp.com/",
   baseURL: "http://localhost:5000",
   paramsSerializer: (param) => queryString.stringify(param),
 });
