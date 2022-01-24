@@ -73,8 +73,13 @@ const loginIcon = (
   </svg>
 );
 
-const cartBadge = (itemsAmount) => {
+const cartBadge = (cart) => {
+  if (!cart) return;
+
+  let itemsAmount = cart.reduce((i1, i2) => i1 + i2.count, 0);
+
   if (!itemsAmount) return;
+
   return (
     <span className="absolute w-6 leading-6 rounded-full text-xs -top-3 -right-3 bg-white text-orange-500">
       {itemsAmount < 10 ? itemsAmount : "9+"}
@@ -135,8 +140,8 @@ const Header = () => {
       <nav className="flex-1 md:block hidden">
         <div className="flex items-center justify-end gap-3 sm:gap-8">
           <button className="relative">
-            <Link to="/cart">
-              {cartBadge(cart.length)}
+            <Link to={"/cart"}>
+              {cartBadge(cart)}
               <svg
                 className="w-7 h-7"
                 fill="none"
